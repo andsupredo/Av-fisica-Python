@@ -8,6 +8,7 @@ class Avaliado:
         self.altura = altura/100
 
     def imc(self):
+        """calculadora de imc junto de sua tabela"""
         imc = round(self.peso/(self.altura * self.altura))
         print('\n\n==============================================\n'
               'Valor IMC\t\t\t\tClassificação\n'
@@ -34,7 +35,7 @@ class Avaliado:
 
 
 class Gordura(Avaliado):
-
+    """Classe de calculo de gordura herdando classe Avaliado"""
     def __init__(self, triciptal = float(input('dobra triciptal: ')), subescapular = float(input('dobra Subscapular: ')), peitoral = float(input('dobra Peitoral: ')), axilar_media = float(input('dobra Axilar Média: ')), abdominal = float(input('dobra Abdominal: ')), suprailiaca = float(input('dobra Suprailíaca: ')), coxa = float(input('dobra Coxa: '))):
         super().__init__()
         self.triciptal = triciptal
@@ -46,6 +47,7 @@ class Gordura(Avaliado):
         self.coxa = coxa
 
     def calculo_gordura(self):
+        """Formulas para calcular gordura (jackson & Pollock 7 dobras)"""
         dc = 1.112 - 0.00043499 * (self.triciptal+self.subescapular+self.peitoral+self.axilar_media+self.abdominal+self.suprailiaca+self.coxa) + 0.00000055 * (self.triciptal+self.subescapular+self.peitoral+self.axilar_media+self.abdominal+self.suprailiaca+self.coxa) * 2 - 0.00028826 * self.idade
         percentual_gordura = ((4.95/dc) - 4.50)*100
         return f'\nSeu percentual de gordura é {"%.2f" %percentual_gordura}%'
