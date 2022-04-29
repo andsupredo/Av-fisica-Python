@@ -1,12 +1,14 @@
 class Avaliado:
     """classe que irá definir características inerentes à pessoas avaliadas"""
 
-    def __init__(self, nome=input('Nome: '), idade=float(input('Idade: ')), peso=float(input("Peso: ")), altura= int(input("Altura (cm): ")), sexo=input("sexo (M/F): ")):
+    def __init__(self, nome, idade, peso, altura, sexo):
         self.nome = nome
-        self.idade = idade
-        self.peso = peso
-        self.altura = altura/100
+        self.idade = int(idade)
+        self.peso = float(peso)
+        self.altura = float(altura)/100
         self.sexo = sexo
+        if sexo not in 'mf':
+            self.sexo = None
 
     def imc(self):
         """calculadora de imc junto de sua tabela"""
@@ -36,40 +38,28 @@ class Avaliado:
         else:
             return 'Erro ao calcular IMC.'
 
-
-class Gordura(Avaliado):
-    """Classe de calculo de gordura herdando classe Avaliado"""
-    def __init__(self, triciptal = float(input('dobra triciptal: ')), subescapular = float(input('dobra Subscapular: ')), peitoral = float(input('dobra Peitoral: ')), axilar_media = float(input('dobra Axilar Média: ')), abdominal = float(input('dobra Abdominal: ')), suprailiaca = float(input('dobra Suprailíaca: ')), coxa = float(input('dobra Coxa: '))):
-        super().__init__()
-        self.triciptal = triciptal
-        self.subescapular = subescapular
-        self.peitoral = peitoral
-        self.axilar_media = axilar_media
-        self.abdominal = abdominal
-        self.suprailiaca = suprailiaca
-        self.coxa = coxa
-
-    def calculo_gordura(self):
-        """Formulas para calcular gordura (jackson & Pollock 7 dobras)"""
-        dc = 1.112 - 0.00043499 * (self.triciptal+self.subescapular+self.peitoral+self.axilar_media+self.abdominal+self.suprailiaca+self.coxa) + 0.00000055 * (self.triciptal+self.subescapular+self.peitoral+self.axilar_media+self.abdominal+self.suprailiaca+self.coxa) * 2 - 0.00028826 * self.idade
-        percentual_gordura = ((4.95/dc) - 4.50)*100
-        return f'\nGordura corporal total: {percentual_gordura:.2f}% ({(self.peso * percentual_gordura)/100:.2f}kg)\n'
+    def gordura(self, triciptal, subescapular, peitoral, axilar_media, abdominal, suprailiaca, coxa):
+        self.triciptal = float(triciptal)
+        self.subescapular = float(subescapular)
+        self.peitoral = float(peitoral)
+        self.axilar_media = float(axilar_media)
+        self.abdominal = float(abdominal)
+        self.suprailiaca = float(suprailiaca)
+        self.coxa = float(coxa)
+        dc = 1.112 - 0.00043499 * (self.triciptal + self.subescapular + self.peitoral + self.axilar_media + self.abdominal + self.suprailiaca + self.coxa) + 0.00000055 * (self.triciptal + self.subescapular + self.peitoral + self.axilar_media + self.abdominal + self.suprailiaca + self.coxa) * 2 - 0.00028826 * self.idade
+        percentual_gordura = ((4.95 / dc) - 4.50) * 100
+        return f'\nGordura corporal total: {percentual_gordura:.2f}% ({(self.peso * percentual_gordura) / 100:.2f}kg)\n'
 
 
-class MassaMuscular(Gordura):
-    """Classe de calculo de massa muscular"""
-    def __init__(self, braco_e=float(input('Circunferencia braço E: ')), braco_d=float(input('Circunferencia braço D: ')), cintura=float(input('Circunferencia cintura: ')), quadril=float(input('Circunferencia quadril: ')), coxa_e=float(input('Circunferencia coxa E: ')), coxa_d=float(input('Circunferencia coxa D: ')), pant_e=float(input('Circunferencia panturrilha E: ')), pant_d=float(input('Circunferencia panturrilha D: '))):
-        super().__init__()
-        self.braco_e = braco_e
-        self.braco_d = braco_d
-        self.cintura = cintura
-        self.quadril = quadril
-        self.coxa_e = coxa_e
-        self.coxa_d = coxa_d
-        self.pant_e = pant_e
-        self.pant_d = pant_d
-
-    def calculo_musc(self):  # Método dos calculos de massa muscular.
+    def massa_muscular(self, braco_e, braco_d, cintura, quadril, coxa_e, coxa_d, pant_e, pant_d):
+        self.braco_e = float(braco_e)
+        self.braco_d = float(braco_d)
+        self.cintura = float(cintura)
+        self.quadril = float(quadril)
+        self.coxa_e = float(coxa_e)
+        self.coxa_d = float(coxa_d)
+        self.pant_e = float(pant_e)
+        self.pant_d = float(pant_d)
         amb = None
         if self.sexo.upper() == 'M':
             amb = ((self.braco_d * 10 - (3.14 * self.triciptal)) * (self.braco_d * 10 - (3.14 * self.triciptal))) / (4 * 3.14) - 10.0
@@ -77,4 +67,4 @@ class MassaMuscular(Gordura):
             amb = (((self.braco_d * 10) - (3.14 * self.triciptal)) * ((self.braco_d * 10) - (3.14 * self.triciptal))) / 4 * 3.14 - 6.5
         else:
             print('Erro ao calcular % de massa magra (sexo inválido)')
-        return f'Massa muscular: {((self.altura * (0.0264 + (0.029 * amb)))/self.peso)*10:.2f}% ({(self.altura * (0.0264 + (0.029 * amb)))/10:.2f}kg)\n'
+        return f'Massa muscular: {((self.altura * (0.0264 + (0.029 * amb))) / self.peso) * 10:.2f}% ({(self.altura * (0.0264 + (0.029 * amb))) / 10:.2f}kg)\n'
